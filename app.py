@@ -6,7 +6,7 @@ from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 
 # === IMPORTACIONES 100% SEGURAS (EVITA CUALQUIER FUNCIÓN MÓVIL DE LANGCHAIN) ===
 from langchain_core.prompts import ChatPromptTemplate
@@ -46,8 +46,8 @@ if resultado:
     base_vectores = resultado
     retriever = base_vectores.as_retriever(search_kwargs={"k": 3})
     
-    # 4. Configurar el modelo de OpenAI y el Prompt Corporativo
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+    # 4. Configurar el modelo de Groq y el Prompt Corporativo
+    llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.2)
     
     system_prompt = (
         "Eres el agente de IA corporativo oficial de Pacífico Gaming Lab. "
