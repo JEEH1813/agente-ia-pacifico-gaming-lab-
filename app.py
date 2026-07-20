@@ -35,8 +35,10 @@ def inicializar_base_conocimiento():
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     fragmentos = text_splitter.split_documents(documentos)
     
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    base_vectores = FAISS.from_documents(fragmentos, embeddings)
+# El spinner le avisa a Render que la app sigue viva y trabajando en segundo plano
+    with st.spinner("Descargando e inicializando modelos de lenguaje... Esto puede tardar un momento la primera vez."):
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        base_vectores = FAISS.from_documents(fragmentos, embeddings)
     return base_vectores
 
 # Intentar cargar los documentos e indexar los vectores
@@ -47,7 +49,11 @@ if resultado:
     retriever = base_vectores.as_retriever(search_kwargs={"k": 3})
     
     # 4. Configurar el modelo de Groq y el Prompt Corporativo
-    llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.2)
+    llm = ChatGroq(
+    model="llama-3.1-8b-instant", 
+    temperature=0.2, 
+    groq_api_key=os.getenv("GROQ_API_KEY")
+)
     
     system_prompt = (
         "Eres el agente de IA corporativo oficial de Pacífico Gaming Lab. "
