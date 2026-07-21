@@ -45,11 +45,11 @@ if resultado:
     base_vectores = resultado
     retriever = base_vectores.as_retriever(search_kwargs={"k": 3})
     
-    # 4. Configurar el modelo de Groq (Leyendo la API Key desde las Variables de Railway)
+    # 4. Configurar el modelo de Groq (Leyendo la API Key desde las Variables de Streamlit Community Cloud)
     llm = ChatGroq(
-        model="llama-3.1-8b-instant", 
-        temperature=0.2, 
-        groq_api_key=os.getenv("GROQ_API_KEY")
+    model="llama-3.1-8b-instant", 
+    temperature=0.2, 
+    groq_api_key=os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY")
     )
     
     system_prompt = (
